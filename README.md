@@ -11,7 +11,7 @@ looks like:
 ![raw_droplet](results/real_data_raw.png)
 
 A thresholding algorithm is applied to the raw image and the droplet is labelled:
-![processed_droplet](results/real_data_processed.png)
+![processed_droplet](results/real_data_result.png)
 
 This is performed for a large enough set of microscope images, and used to train the neural network. 
 The resulting trained model is then used on real data.

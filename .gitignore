@@ -130,4 +130,5 @@ dmypy.json
 
 .idea/
 
-detection_model/
+droplet_detection_model/
+*.jpg
