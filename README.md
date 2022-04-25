@@ -18,6 +18,9 @@ The resulting trained model is then used on real data.
 
 **Note:** All biological droplet data sourced from [@cfsb618](https://github.com/cfsb618)
 
+## Model
+![keras_model](results/model.png)
+
 ## Installation
 1. Create the conda environment from file (for Mac M1)
 ```shell
