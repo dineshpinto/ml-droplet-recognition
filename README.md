@@ -2,7 +2,7 @@
 
 Use a Convolutional Neural Network built in TensorFlow and Keras to detect a droplet in an experimental data set.
 
-The neural net consists of 3 layers, and for testing data shows reasonable results as shown below:
+The neural net consists of 4 layers, and for testing data shows reasonable results as shown below:
 
 ![neural_net_results](results/test_data_result.png)
 
