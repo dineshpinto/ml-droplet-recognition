@@ -1,9 +1,8 @@
 # Droplet Detection with Neural Networks
 
-Use a Convolutional Neural Network (CNN) built in TensorFlow and Keras to detect a droplet in an experimental data set.
+Use a Convolutional Neural Network built in TensorFlow and Keras to detect a droplet in an experimental data set.
 
-The neural net consists of 3 layers, and for testing data shows reasonable results for 
-test data as shown below:
+The neural net consists of 3 layers, and for testing data shows reasonable results as shown below:
 
 ![neural_net_results](results/test_data_result.png)
 
@@ -11,9 +10,13 @@ The goal is to apply it to a biological sample and detect droplet formation. The
 looks like:
 ![raw_droplet](results/real_data_raw.png)
 
-This a thresholding algorithm is applied and the droplet is labelled:
+A thresholding algorithm is applied to the raw image and the droplet is labelled:
 ![processed_droplet](results/real_data_processed.png)
 
+This is performed for a large enough set of microscope images, and used to train the neural network. 
+The resulting trained model is then used on real data.
+
+**Note:** All biological droplet data sourced from [@cfsb618](https://github.com/cfsb618)
 
 ## Installation
 1. Create the conda environment from file (for Mac M1)
