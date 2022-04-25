@@ -131,4 +131,3 @@ dmypy.json
 .idea/
 
 droplet_detection_model/
-*.jpg
