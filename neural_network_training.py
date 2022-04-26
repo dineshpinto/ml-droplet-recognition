@@ -41,9 +41,11 @@ if __name__ == "__main__":
 
     print(f"Image shape = {img_batch.shape}, Label shape = {label_batch.shape}")
 
+    print(f"Generating model")
     model = generate_model(img_shape)
 
     t1 = time.time()
+    print(f"Starting model fit...")
     model.fit(img_batch, label_batch, batch_size=1000, epochs=1000, verbose=1)
     print(f"Time taken = {int(time.time() - t1)} s")
 
