@@ -8,7 +8,7 @@ The neural net consists of 4 layers, and for testing data shows reasonable resul
 
 The goal is to apply it to a biological sample and detect droplet formation. The droplet as imaged by a microscope 
 looks like:
-![raw_droplet](results/real_data_raw.png)
+<img src="results/real_data_raw.png" width="250" height="200">
 
 A thresholding algorithm is applied to the raw image and the droplet is labelled:
 ![processed_droplet](results/real_data_result.jpg)
