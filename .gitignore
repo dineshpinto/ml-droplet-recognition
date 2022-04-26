@@ -129,5 +129,3 @@ dmypy.json
 .pyre/
 
 .idea/
-
-droplet_detection_model/
