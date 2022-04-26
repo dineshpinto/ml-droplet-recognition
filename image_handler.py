@@ -17,7 +17,8 @@ def rescale_image(_img: np.ndarray, scale_percent: int) -> np.ndarray:
 def load_image(
         image_path: str,
         circle_label: tuple,
-        overlay: bool = False) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        overlay: bool = False,
+        scale_percent: int = 30) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """ This is the main image processor:
     - Load image from filepath
     - Rescale it to reduce resolution
@@ -25,7 +26,7 @@ def load_image(
     - Threshold image to increase contrast
     - Cast image as float add overlays if selected
    """
-    raw = rescale_image(cv2.imread(image_path), scale_percent=30)
+    raw = rescale_image(cv2.imread(image_path), scale_percent=scale_percent)
     _, image = cv2.threshold(cv2.bitwise_not(raw), 200, 255, cv2.THRESH_TOZERO_INV)
     image = image.astype("float32") / 255
 
@@ -46,7 +47,8 @@ def load_image(
 def load_images_from_folder(
         folder: str,
         num_images: int,
-        circle_labels: list) -> Tuple[np.ndarray, np.ndarray]:
+        circle_labels: list,
+        scale_percent: int) -> Tuple[np.ndarray, np.ndarray]:
     """ Load images in a folder until num_images. """
     image_files = []
     for file in os.listdir(folder):
@@ -62,7 +64,12 @@ def load_images_from_folder(
     images = []
     labels = []
     for idx, image in enumerate(image_files[:num_images]):
-        _, image, label = load_image(os.path.join(folder, image), circle_labels[idx])
+        _, image, label = load_image(
+            os.path.join(folder, image),
+            circle_labels[idx],
+            overlay=False,
+            scale_percent=scale_percent
+        )
         images.append(image)
         labels.append(label)
 
@@ -72,9 +79,12 @@ def load_images_from_folder(
     return images, labels
 
 
-def load_test_image(image_path: str, circle_label: tuple) -> Tuple[np.ndarray, np.ndarray]:
+def load_test_image(
+        image_path: str,
+        circle_label: tuple,
+        scale_percent: int = 30) -> Tuple[np.ndarray, np.ndarray]:
     """ Load an image for testing, expands image dims by 1. """
-    _, image, label = load_image(image_path, circle_label)
+    _, image, label = load_image(image_path, circle_label, overlay=False, scale_percent=scale_percent)
     return np.expand_dims(image, 0), np.expand_dims(label, 0)
 
 
