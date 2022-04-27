@@ -6,12 +6,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def rescale_image(_img: np.ndarray, scale_percent: int) -> np.ndarray:
+def rescale_image(image: np.ndarray, scale_percent: int) -> np.ndarray:
     """ Reduce resolution of image by a factor of scale_percent. """
-    width = int(_img.shape[1] * scale_percent / 100)
-    height = int(_img.shape[0] * scale_percent / 100)
-    dim = (width, height)
-    return cv2.resize(_img, dim, interpolation=cv2.INTER_AREA)
+    width = int(image.shape[1] * scale_percent / 100)
+    height = int(image.shape[0] * scale_percent / 100)
+    return cv2.resize(image, (width, height), interpolation=cv2.INTER_AREA)
 
 
 def load_image(
@@ -19,12 +18,13 @@ def load_image(
         circle_label: tuple,
         overlay: bool = False,
         scale_percent: int = 30) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """ This is the main image processor:
-    - Load image from filepath
-    - Rescale it to reduce resolution
-    - Bitwise invert the image
-    - Threshold image to increase contrast
-    - Cast image as float add overlays if selected
+    """
+    This is the main image processor:
+        - Load image from filepath
+        - Rescale it to reduce resolution
+        - Bitwise invert the image
+        - Threshold image to increase contrast
+        - Cast image as float add overlays if selected
    """
     raw = rescale_image(cv2.imread(image_path), scale_percent=scale_percent)
     _, image = cv2.threshold(cv2.bitwise_not(raw), 200, 255, cv2.THRESH_TOZERO_INV)
@@ -32,14 +32,22 @@ def load_image(
 
     label = np.zeros((image.shape[0], image.shape[1], 1), dtype="float32")
     if circle_label:
-        cv2.circle(label, center=(circle_label[0], circle_label[1]),
-                   radius=int(np.ceil(label.shape[1] * circle_label[2])),
-                   color=(1, 1, 1), thickness=2)
+        cv2.circle(
+            label,
+            center=(circle_label[0], circle_label[1]),
+            radius=int(np.ceil(label.shape[1] * circle_label[2])),
+            color=(1, 1, 1),
+            thickness=2
+        )
 
     if circle_label and overlay:
-        cv2.circle(image, center=(circle_label[0], circle_label[1]),
-                   radius=int(np.ceil(label.shape[1] * circle_label[2])),
-                   color=(1, 1, 1), thickness=2)
+        cv2.circle(
+            image,
+            center=(circle_label[0], circle_label[1]),
+            radius=int(np.ceil(label.shape[1] * circle_label[2])),
+            color=(1, 1, 1),
+            thickness=2
+        )
 
     return raw, image, label
 
@@ -65,8 +73,8 @@ def load_images_from_folder(
     labels = []
     for idx, image in enumerate(image_files[:num_images]):
         _, image, label = load_image(
-            os.path.join(folder, image),
-            circle_labels[idx],
+            image_path=os.path.join(folder, image),
+            circle_label=circle_labels[idx],
             overlay=False,
             scale_percent=scale_percent
         )
@@ -90,7 +98,7 @@ def load_test_image(
 
 def to_three_channels(label: np.ndarray) -> np.ndarray:
     """ Cast a 1 channel image to a 3 channel image """
-    return np.squeeze(np.stack((label, label, label), 2))
+    return np.squeeze(np.stack((label, label, label), axis=2))
 
 
 def show_sample(image: np.ndarray, label: np.ndarray) -> plt.Figure:
@@ -104,7 +112,7 @@ def show_sample(image: np.ndarray, label: np.ndarray) -> plt.Figure:
 
 
 def show_batch(images: np.ndarray, labels: np.ndarray, idx: int = 0) -> plt.Figure:
-    """ Plot a single image at index idx from an image array. """
+    """ Plot a single image at index `idx` from an image array. """
     return show_sample(images[idx, :, :, :], labels[idx, :, :, :])
 
 

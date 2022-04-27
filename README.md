@@ -2,10 +2,12 @@
 
 Use a Convolutional Neural Network built in TensorFlow and Keras to detect a droplet in an experimental data set.
 
+## Test Data
 The neural net consists of 4 layers, and for testing data shows reasonable results as shown below:
 
 ![neural_net_results](results/test_data_result.png)
 
+## Experimental Data
 The goal is to apply it to a biological sample and detect droplet formation. The droplet as imaged by a microscope 
 looks like:
 
@@ -35,11 +37,15 @@ conda activate ml_droplet
 ```shell
 python -m ipykernel install --name=ml_droplet
 ```
-5. Explore the Jupyterlab Notebooks
+5. Explore and test the Jupyterlab Notebooks
 ```shell
 jupyter lab
 ```
 
+## Usage
+1. Run `neural_network_training.py` with training data stored in `training_data` and labels in `droplet_labels.py`
+2. This will train the neural network model and save it in `models/droplet_detection_model`
+3. Test the model using `DropletDetectionTesting.ipynb`
 
 ### Export conda environment
 ```shell
