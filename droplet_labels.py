@@ -1,3 +1,9 @@
+# Currently, the droplet circle labels are hard-coded to a specific image size
+# This is will be updated in a future version to handle different image sizes
+# using relative positions
+# TODO: Use relative positions for labels
+
+# Labels are in the format (x_center, y_center, radius)
 droplet_labels = [
     (130, 85, 0.14),
     (128, 85, 0.14),

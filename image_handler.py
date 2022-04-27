@@ -27,10 +27,10 @@ def load_image(
         - Cast image as float add overlays if selected
    """
     raw = rescale_image(cv2.imread(image_path), scale_percent=scale_percent)
-    _, image = cv2.threshold(cv2.bitwise_not(raw), 200, 255, cv2.THRESH_TOZERO_INV)
+    _, image = cv2.threshold(cv2.bitwise_not(raw), thresh=200, maxval=255, type=cv2.THRESH_TOZERO_INV)
     image = image.astype("float32") / 255
-
     label = np.zeros((image.shape[0], image.shape[1], 1), dtype="float32")
+
     if circle_label:
         cv2.circle(
             label,
