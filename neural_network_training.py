@@ -46,7 +46,6 @@ if __name__ == "__main__":
     IMAGE_SHAPE = (187, 249, 3)
 
     # Load number of images equal to droplet labels,
-    # TODO: Use a dict mapping for labels, current method will work but is error prone
     print(f"Loading {len(droplet_labels)} images from {DATA_FOLDER}...")
     img_batch, label_batch = handler.load_images_from_folder(
         folder=DATA_FOLDER,
