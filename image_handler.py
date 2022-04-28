@@ -1,5 +1,5 @@
 import os
-from typing import Tuple
+from typing import Tuple, Union
 
 import cv2
 import numpy as np
@@ -92,7 +92,7 @@ def load_images_from_folder(
 
 def load_test_image(
         image_path: str,
-        circle_label: tuple,
+        circle_label: Union[tuple, None],
         scale_percent: int = 30) -> Tuple[np.ndarray, np.ndarray]:
     """ Load an image for testing, expands image dims by 1. """
     _, image, label = load_image(image_path, circle_label, overlay=False, scale_percent=scale_percent)
