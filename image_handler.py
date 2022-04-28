@@ -14,7 +14,7 @@ def rescale_image(image: np.ndarray, scale_percent: int) -> np.ndarray:
 
 def load_image(
         image_path: str,
-        circle_label: tuple,
+        circle_label: Union[tuple, None],
         overlay: bool = False,
         scale_percent: int = 30) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
@@ -26,7 +26,12 @@ def load_image(
         - Cast image as float add overlays if selected
    """
     raw = rescale_image(cv2.imread(image_path), scale_percent=scale_percent)
-    _, image = cv2.threshold(cv2.bitwise_not(raw), thresh=200, maxval=255, type=cv2.THRESH_TOZERO_INV)
+    _, image = cv2.threshold(
+        cv2.bitwise_not(raw),
+        thresh=200,
+        maxval=255,
+        type=cv2.THRESH_TOZERO_INV
+    )
     image = image.astype("float32") / 255
     label = np.zeros((image.shape[0], image.shape[1], 1), dtype="float32")
 
@@ -95,5 +100,10 @@ def load_test_image(
         circle_label: Union[tuple, None],
         scale_percent: int = 30) -> Tuple[np.ndarray, np.ndarray]:
     """ Load an image for testing, expands image dims by 1. """
-    _, image, label = load_image(image_path, circle_label, overlay=False, scale_percent=scale_percent)
+    _, image, label = load_image(
+        image_path,
+        circle_label,
+        overlay=False,
+        scale_percent=scale_percent
+    )
     return np.expand_dims(image, 0), np.expand_dims(label, 0)
