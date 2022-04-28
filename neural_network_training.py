@@ -3,6 +3,7 @@ import time
 
 import tensorflow as tf
 from tensorflow import keras
+import datetime
 
 import image_handler as handler
 from droplet_labels import droplet_labels
@@ -18,23 +19,23 @@ def generate_model(image_shape: tuple) -> keras.Model:
         kernel_initializer='glorot_normal',
         kernel_regularizer=None
     )
-    # Layer 1 on the network, expand to 16 dimensions and normalize output
-    conv1 = keras.layers.Conv2D(filters=64, kernel_size=4, **kwargs)(inputs)
+    # Layer 1 on the network
+    conv1 = keras.layers.Conv2D(filters=32, kernel_size=4, **kwargs)(inputs)
     conv1 = keras.layers.BatchNormalization(momentum=0.99)(conv1)
 
-    # Layer 2 on the network, expand to 32 dimensions and normalize output
-    conv2 = keras.layers.Conv2D(filters=32, kernel_size=4, **kwargs)(conv1)
+    # Layer 2 on the network
+    conv2 = keras.layers.Conv2D(filters=64, kernel_size=4, **kwargs)(conv1)
     conv2 = keras.layers.BatchNormalization(momentum=0.99)(conv2)
 
-    # Layer 3 on the network, contract to 16 dimensions and normalize output
+    # Layer 3 on the network
     conv3 = keras.layers.Conv2D(filters=16, kernel_size=4, **kwargs)(conv2)
     conv3 = keras.layers.BatchNormalization(momentum=0.99)(conv3)
 
-    # Layer 4 on the network, contract to 1 dimension
+    # Layer 4 on the network
     outputs = keras.layers.Conv2D(filters=1, kernel_size=4, **kwargs)(conv3)
 
     keras_model = keras.Model(inputs=inputs, outputs=outputs)
-    keras_model.compile(optimizer="Adam", loss="mean_squared_error")
+    keras_model.compile(optimizer="adam", loss="mean_squared_error")
 
     return keras_model
 
@@ -49,10 +50,8 @@ if __name__ == "__main__":
         folder=DATA_FOLDER,
         num_images=len(droplet_labels),
         circle_labels=droplet_labels,
-        scale_percent=30
+        scale_percent=40
     )
-
-    image_shape = (img_batch.shape[1], img_batch.shape[2], 3)
 
     print(f"Loaded image shape = {img_batch.shape}, Label shape = {label_batch.shape}")
 
@@ -68,14 +67,23 @@ if __name__ == "__main__":
             # Memory growth must be set before GPUs have been initialized
             print(e)
 
-
     print(f"Generating model")
-    model = generate_model(image_shape)
+    model = generate_model(image_shape=(img_batch.shape[1], img_batch.shape[2], 3))
     print(model.summary())
+
+    log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
     t1 = time.time()
     print(f"Starting model fit...")
-    model.fit(img_batch, label_batch, batch_size=1, epochs=100, verbose=1)
+    model.fit(
+        img_batch,
+        label_batch,
+        batch_size=1,
+        epochs=60,
+        verbose=1,
+        callbacks=[tensorboard_callback]
+    )
     print(f"Time taken to fit = {int(time.time() - t1)} s")
 
     model_save_path = os.path.join("models", MODEL_NAME)
