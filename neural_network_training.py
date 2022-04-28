@@ -1,6 +1,7 @@
 import os.path
 import time
 
+import tensorflow as tf
 from tensorflow import keras
 
 import image_handler as handler
@@ -18,19 +19,19 @@ def generate_model(image_shape: tuple) -> keras.Model:
         kernel_regularizer=None
     )
     # Layer 1 on the network, expand to 16 dimensions and normalize output
-    conv1 = keras.layers.Conv2D(filters=32, kernel_size=5, **kwargs)(inputs)
+    conv1 = keras.layers.Conv2D(filters=64, kernel_size=4, **kwargs)(inputs)
     conv1 = keras.layers.BatchNormalization(momentum=0.99)(conv1)
 
     # Layer 2 on the network, expand to 32 dimensions and normalize output
-    conv2 = keras.layers.Conv2D(filters=64, kernel_size=5, **kwargs)(conv1)
+    conv2 = keras.layers.Conv2D(filters=32, kernel_size=4, **kwargs)(conv1)
     conv2 = keras.layers.BatchNormalization(momentum=0.99)(conv2)
 
     # Layer 3 on the network, contract to 16 dimensions and normalize output
-    conv3 = keras.layers.Conv2D(filters=16, kernel_size=5, **kwargs)(conv2)
+    conv3 = keras.layers.Conv2D(filters=16, kernel_size=4, **kwargs)(conv2)
     conv3 = keras.layers.BatchNormalization(momentum=0.99)(conv3)
 
     # Layer 4 on the network, contract to 1 dimension
-    outputs = keras.layers.Conv2D(filters=1, kernel_size=5, **kwargs)(conv3)
+    outputs = keras.layers.Conv2D(filters=1, kernel_size=4, **kwargs)(conv3)
 
     keras_model = keras.Model(inputs=inputs, outputs=outputs)
     keras_model.compile(optimizer="Adam", loss="mean_squared_error")
@@ -41,8 +42,6 @@ def generate_model(image_shape: tuple) -> keras.Model:
 if __name__ == "__main__":
     DATA_FOLDER = "training_data"
     MODEL_NAME = "droplet_detection_model"
-    # Image shape can also be extracted from image itself, currently hard-coded for safety
-    IMAGE_SHAPE = (187, 249, 3)
 
     # Load number of images equal to droplet labels,
     print(f"Loading {len(droplet_labels)} images from {DATA_FOLDER}...")
@@ -53,15 +52,30 @@ if __name__ == "__main__":
         scale_percent=30
     )
 
+    image_shape = (img_batch.shape[1], img_batch.shape[2], 3)
+
     print(f"Loaded image shape = {img_batch.shape}, Label shape = {label_batch.shape}")
 
+    gpus = tf.config.list_physical_devices('GPU')
+    if gpus:
+        try:
+            # Currently, memory growth needs to be the same across GPUs
+            for gpu in gpus:
+                tf.config.experimental.set_memory_growth(gpu, True)
+            logical_gpus = tf.config.list_logical_devices('GPU')
+            print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+        except RuntimeError as e:
+            # Memory growth must be set before GPUs have been initialized
+            print(e)
+
+
     print(f"Generating model")
-    model = generate_model(IMAGE_SHAPE)
+    model = generate_model(image_shape)
     print(model.summary())
 
     t1 = time.time()
     print(f"Starting model fit...")
-    model.fit(img_batch, label_batch, batch_size=200, epochs=200, verbose=1)
+    model.fit(img_batch, label_batch, batch_size=1, epochs=100, verbose=1)
     print(f"Time taken to fit = {int(time.time() - t1)} s")
 
     model_save_path = os.path.join("models", MODEL_NAME)

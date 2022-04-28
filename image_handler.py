@@ -30,11 +30,11 @@ def load_image(
     image = image.astype("float32") / 255
     label = np.zeros((image.shape[0], image.shape[1], 1), dtype="float32")
 
-    x_center = int(np.ceil(circle_label[0] * image.shape[1]))
-    y_center = int(np.ceil(circle_label[1] * image.shape[0]))
-    radius = int(np.ceil(circle_label[2] * image.shape[1]))
-
     if circle_label:
+        x_center = int(np.ceil(circle_label[0] * image.shape[1]))
+        y_center = int(np.ceil(circle_label[1] * image.shape[0]))
+        radius = int(np.ceil(circle_label[2] * image.shape[1]))
+
         cv2.circle(
             label,
             center=(x_center, y_center),
@@ -43,14 +43,14 @@ def load_image(
             thickness=1
         )
 
-    if circle_label and overlay:
-        cv2.circle(
-            image,
-            center=(x_center, y_center),
-            radius=radius,
-            color=(1, 1, 1),
-            thickness=1
-        )
+        if overlay:
+            cv2.circle(
+                image,
+                center=(x_center, y_center),
+                radius=radius,
+                color=(1, 1, 1),
+                thickness=1
+            )
 
     return raw, image, label
 
