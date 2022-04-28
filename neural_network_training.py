@@ -18,19 +18,19 @@ def generate_model(image_shape: tuple) -> keras.Model:
         kernel_regularizer=None
     )
     # Layer 1 on the network, expand to 16 dimensions and normalize output
-    conv1 = keras.layers.Conv2D(filters=16, kernel_size=4, **kwargs)(inputs)
+    conv1 = keras.layers.Conv2D(filters=32, kernel_size=5, **kwargs)(inputs)
     conv1 = keras.layers.BatchNormalization(momentum=0.99)(conv1)
 
     # Layer 2 on the network, expand to 32 dimensions and normalize output
-    conv2 = keras.layers.Conv2D(filters=32, kernel_size=4, **kwargs)(conv1)
+    conv2 = keras.layers.Conv2D(filters=64, kernel_size=5, **kwargs)(conv1)
     conv2 = keras.layers.BatchNormalization(momentum=0.99)(conv2)
 
     # Layer 3 on the network, contract to 16 dimensions and normalize output
-    conv3 = keras.layers.Conv2D(filters=16, kernel_size=4, **kwargs)(conv2)
+    conv3 = keras.layers.Conv2D(filters=16, kernel_size=5, **kwargs)(conv2)
     conv3 = keras.layers.BatchNormalization(momentum=0.99)(conv3)
 
     # Layer 4 on the network, contract to 1 dimension
-    outputs = keras.layers.Conv2D(filters=1, kernel_size=4, **kwargs)(conv3)
+    outputs = keras.layers.Conv2D(filters=1, kernel_size=5, **kwargs)(conv3)
 
     keras_model = keras.Model(inputs=inputs, outputs=outputs)
     keras_model.compile(optimizer="Adam", loss="mean_squared_error")
@@ -57,11 +57,12 @@ if __name__ == "__main__":
 
     print(f"Generating model")
     model = generate_model(IMAGE_SHAPE)
+    print(model.summary())
 
     t1 = time.time()
     print(f"Starting model fit...")
-    model.fit(img_batch, label_batch, batch_size=1000, epochs=1000, verbose=1)
-    print(f"Time taken = {int(time.time() - t1)} s")
+    model.fit(img_batch, label_batch, batch_size=200, epochs=200, verbose=1)
+    print(f"Time taken to fit = {int(time.time() - t1)} s")
 
     model_save_path = os.path.join("models", MODEL_NAME)
     print(f"Saving model to {model_save_path}")
