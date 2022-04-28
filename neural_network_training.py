@@ -1,8 +1,7 @@
 import os.path
 import time
 
-import keras
-import keras.layers
+from tensorflow import keras
 
 import image_handler as handler
 from droplet_labels import droplet_labels
