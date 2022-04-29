@@ -7,6 +7,7 @@ import datetime
 
 import image_handler as handler
 from droplet_labels import droplet_labels
+from plot_results import ModelPlotting
 
 
 def generate_model(image_shape: tuple) -> keras.Model:
@@ -17,8 +18,9 @@ def generate_model(image_shape: tuple) -> keras.Model:
         padding='same',
         activation='relu',
         kernel_initializer='glorot_normal',
-        kernel_regularizer=None
+        kernel_regularizer=None,
     )
+
     # Layer 1 on the network
     conv1 = keras.layers.Conv2D(filters=32, kernel_size=4, **kwargs)(inputs)
     conv1 = keras.layers.BatchNormalization(momentum=0.99)(conv1)
@@ -89,3 +91,18 @@ if __name__ == "__main__":
     model_save_path = os.path.join("models", MODEL_NAME)
     print(f"Saving model to {model_save_path}")
     model.save(model_save_path)
+
+    # Plot Results
+    mp = ModelPlotting(scale_percent=40, training_path="training_data")
+
+    results_output_path = os.path.join("results", "model.png")
+    mp.plot_and_save_model_layout(results_output_path)
+
+    # compare_output_path = os.path.join("output_data", "compare")
+    # mp.plot_and_save_model_comparison(compare_output_path)
+
+    basic_output_path = os.path.join("output_data", "basic")
+    mp.plot_and_save_basic_images(basic_output_path)
+
+    droplet_overlay_path = os.path.join("output_data", "droplet_detection")
+    mp.plot_and_save_overlay(basic_output_path, droplet_overlay_path)
