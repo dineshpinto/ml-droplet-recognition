@@ -13,11 +13,10 @@ looks like:
 
 <img src="results/real_data_raw.png" width="327" height="250" alt="raw_image">
 
-A thresholding algorithm is applied to the raw image and the droplet is labelled:
+A thresholding algorithm is applied to the raw image and the droplet is labelled, the output of the trained network for real data looks like:
 ![processed_droplet](results/real_data_result.jpg)
 
-This is performed for a large enough set of microscope images, and used to train the neural network. 
-The resulting trained model is then used on real data.
+This training is performed for a sufficiently large set of microscope images, and the resulting trained model is then used on real data.
 
 **Note:** All biological droplet data sourced from [@cfsb618](https://github.com/cfsb618)
 
@@ -25,9 +24,9 @@ The resulting trained model is then used on real data.
 ![keras_model](results/model.png)
 
 ## Installation
-1. Create the conda environment from file (for Mac M1)
+1. Create the conda environment from file (where `xx` is ether `win10` or `macm1`)
 ```shell
-conda env create --file conda-env-macm1.yml
+conda env create --file conda-env-xx.yml
 ```
 3. Activate environment 
 ```shell
@@ -43,9 +42,10 @@ jupyter lab
 ```
 
 ## Usage
-1. Run `neural_network_training.py` with training data stored in `training_data` and labels in `droplet_labels.py`
-2. This will train the neural network model and save it in `models/droplet_detection_model`
-3. Test the model using `DropletDetectionTesting.ipynb`
+1. Place your training data in `training_data/` and the corresponding droplet labels in `droplet_labels.py`
+2. Run `neural_network_training.py`
+3. This will train the neural network model and save the resulting model in `models/droplet_detection_model`
+4. Test the model by running an automated test set `plot_results.py` or manually using `DropletDetectionTesting.ipynb`
 
 ### Export conda environment
 ```shell
