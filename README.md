@@ -13,12 +13,12 @@ looks like:
 
 <img src="results/real_data_raw.png" width="327" height="250" alt="raw_image">
 
-A thresholding algorithm is applied to the raw image and the droplet is labelled, the output of the trained network for real data looks like:
+The model is trained on a subset of real data. The trained model is then used to find the droplet in the experimental images. 
+An example of this is shown below:
+
 ![processed_droplet](results/real_data_result.jpg)
 
-This training is performed for a sufficiently large set of microscope images, and the resulting trained model is then used on real data.
-
-**Note:** All biological droplet data sourced from [@cfsb618](https://github.com/cfsb618)
+**Note:** All biological droplet data is sourced from [@cfsb618](https://github.com/cfsb618)
 
 ## Model
 ![keras_model](results/model.png)
@@ -36,16 +36,28 @@ conda activate ml_droplet
 ```shell
 python -m ipykernel install --name=ml_droplet
 ```
-5. Explore and test the Jupyterlab Notebooks
-```shell
-jupyter lab
-```
+
+### Performance
+For optimal performance use a CUDA compatible NVIDIA GPU with the cuDNN libraries. The training times are around 3 orders of magnitude shorter.
+A guide on how to do this is given in the Tensorflow docs [here](https://www.tensorflow.org/install/gpu).
+
+On Apple Silicon, you can use the tensorflow-metal plugin. A guide on doing is given in the Apple developer docs [here](https://developer.apple.com/metal/tensorflow-plugin/).
 
 ## Usage
 1. Place your training data in `training_data/` and the corresponding droplet labels in `droplet_labels.py`
-2. Run `neural_network_training.py`
-3. This will train the neural network model and save the resulting model in `models/droplet_detection_model`
-4. Test the model by running an automated test set `plot_results.py` or manually using `DropletDetectionTesting.ipynb`
+2. Train the model 
+```shell
+python neural_network_training.py
+```
+4. This will train the neural network model and save the resulting model in `models/droplet_detection_model`
+5. Test the model by running an automated test set
+```shell
+python plot_results.py
+``` 
+OR manually using the JupyterLab Notebook 
+```shell 
+jupyter lab DropletDetectionTesting.ipynb
+```
 
 ### Export conda environment
 ```shell
