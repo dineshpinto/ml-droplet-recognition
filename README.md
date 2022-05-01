@@ -39,9 +39,9 @@ python -m ipykernel install --name=ml_droplet
 
 ### Performance
 For optimal performance use a CUDA compatible NVIDIA GPU with the cuDNN libraries. The training times are around 3 orders of magnitude shorter.
-A guide on how to do this is given in the Tensorflow docs [here](https://www.tensorflow.org/install/gpu).
+A guide on how to do this is given in the [Tensorflow docs](https://www.tensorflow.org/install/gpu).
 
-On Apple Silicon, you can use the tensorflow-metal plugin. A guide on doing is given in the Apple developer docs [here](https://developer.apple.com/metal/tensorflow-plugin/).
+On Apple Silicon, you can use the tensorflow-metal plugin. A guide on how to do this is given in the [Apple developer docs](https://developer.apple.com/metal/tensorflow-plugin/).
 
 ## Usage
 1. Place your training data in `training_data/` and the corresponding droplet labels in `droplet_labels.py`
