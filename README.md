@@ -59,6 +59,10 @@ OR manually using the JupyterLab Notebook
 jupyter lab DropletDetectionTesting.ipynb
 ```
 
+## TODO
+- [ ] Add automated hyperparameter optimization. 
+- [ ] Add droplet feature detection, such as detecting the point of phase separation
+
 ### Export conda environment
 ```shell
 conda env export --no-builds | grep -v "^prefix: " > conda-env.yml
