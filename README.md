@@ -62,6 +62,7 @@ jupyter lab DropletDetectionTesting.ipynb
 ## TODO
 - [x] Add automated hyperparameter optimization. 
 - [ ] Add droplet feature detection, such as detecting the point of phase separation
+- [ ] Add random sampling for training and testing data (example code below)
 
 ### Export conda environment
 ```shell
