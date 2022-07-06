@@ -234,4 +234,3 @@ dependencies:
     - typing-extensions==4.2.0
     - werkzeug==2.1.1
     - wrapt==1.14.0
-prefix: C:\Users\pinto\AppData\Local\Continuum\anaconda3\envs\ml_droplet

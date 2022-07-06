@@ -1,9 +1,9 @@
+import datetime
 import os.path
 import time
 
 import tensorflow as tf
 from tensorflow import keras
-import datetime
 
 import image_handler as handler
 from droplet_labels import droplet_labels
